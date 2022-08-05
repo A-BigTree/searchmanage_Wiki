@@ -136,7 +136,7 @@ classDiagram
 ### 导入与初始化
 
 ```python
-from searchmanage import SearchManage
+from searchmanage_Wiki import SearchManage
 
 search_m1 = SearchManage(key='search', m_num=20)
 search_m2 = SearchManage(key='ids', m_num=10)
@@ -209,7 +209,7 @@ m_num(int): 指定线程数目;
 ### 导入与初始化
 
 ```python
-from search import Wikipedia
+from searchmanage_Wiki import Wikipedia
  
 w1 = Wikipedia(m_num = 10)
 """
@@ -248,7 +248,7 @@ m_num(int):指定运行线程数量
 ### 导入与初始化
 
 ```python
-from searchmanage import SparqlQuery
+from searchmanage_Wiki import SparqlQuery
 
 sql = SparqlQuery(m_num = 10, format_ = 'json')
 """
@@ -307,7 +307,7 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
 ### 导入与初始化
 
 ```python
-from searchmanage import BingQuery
+from searchmanage_Wiki import BingQuery
 
 b = BingQuery(m_num = 10)
 """
@@ -342,7 +342,7 @@ def search_run(self, points: list, timeout: float = 30.0, time_stop: float = 30.
 ### 导入初始化
 
 ```python
-from searchmanage import SpellCheck
+from searchmanage_Wiki import SpellCheck
 
 sc = SpellCheck(m_num = 10)
 """

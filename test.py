@@ -6,12 +6,9 @@
 # @version : V0.4.5
 #
 
-from searchmanage import Tools, SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck
+from SearchManage import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck
 
 if __name__ == "__main__":
-    # Read data from csv
-    d, d_t = Tools.read_csv("../data/1C9LFOKN.csv", is_header=True, out_data_t=True, is_print=True)
-    print(len(d_t))
 
     # Example data
     p1 = [['SEU', 'Chain', 'English'], ['computer', 'games', 'computer game'], ['graph', 'wikipedia'],
