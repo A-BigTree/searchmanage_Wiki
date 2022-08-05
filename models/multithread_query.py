@@ -6,8 +6,8 @@
 # @version : V0.4.5
 #
 
-from searchmanage.tools import Tools
-from searchmanage.models import Entities
+from tools import Tools
+from models import Entities
 from queue import Queue
 from warnings import warn
 from typing import Union, List

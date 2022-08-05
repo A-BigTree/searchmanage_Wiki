@@ -6,5 +6,5 @@
 # @version : V1.0 
 #
 
-from searchmanage.models.entities import RequestAnalysis, Entities
-from searchmanage.models.multithread_query import EntitiesSearch
+from models.entities import RequestAnalysis, Entities
+from models.multithread_query import EntitiesSearch
