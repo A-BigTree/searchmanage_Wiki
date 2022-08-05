@@ -11,8 +11,8 @@ import sys
 from typing import Union, List
 from warnings import warn
 from queue import Queue
-from searchmanage.models import EntitiesSearch, Entities
-from searchmanage.tools import Tools, AnalysisTools
+from models import EntitiesSearch, Entities
+from tools import Tools, AnalysisTools
 from SPARQLWrapper import SPARQLWrapper
 import wikipedia
 
