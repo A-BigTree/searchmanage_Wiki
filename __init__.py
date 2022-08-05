@@ -6,6 +6,6 @@
 # @version : V0.4.5
 #
 
-from models import EntitiesSearch, Entities, RequestAnalysis
-from tools import Tools, AnalysisTools
-from SearchManage import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck
+from .models import EntitiesSearch, Entities, RequestAnalysis
+from .tools import Tools, AnalysisTools
+from .SearchManage import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck
