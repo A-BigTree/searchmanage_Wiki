@@ -6,5 +6,5 @@
 # @version : V1.0 
 #
 
-from searchmanage.tools.Tools import Tools
-from searchmanage.tools.AnalysisTools import AnalysisTools
+from tools.Tools import Tools
+from tools.AnalysisTools import AnalysisTools

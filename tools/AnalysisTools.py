@@ -6,11 +6,11 @@
 # @version : V0.4.0
 #
 
-import re
 from typing import Union, List
 from warnings import warn
 from bs4 import BeautifulSoup
 from requests import Response
+import re
 
 DATA_TYPE = {
     'commonsMedia': 'string',
