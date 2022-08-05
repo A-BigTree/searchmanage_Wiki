@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     # SearchManage: key = 'ids'
     s2 = SearchManage(key='ids', m_num=20)
-    r2 = s2.search_run(r1['id'], keys=['labels/en'])
+    r2 = s2.search_run(r1['id'], keys=['labels/en', 'claims/P//'])
     # print(r2)
 
     # Wikipedia: <wikipedia.suggest()>
