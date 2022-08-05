@@ -79,7 +79,7 @@ class EntitiesSearch(object):
 
         self.paramFormat = param_format
 
-    def __dict_param_format(self, data_1d: list):
+    def __dict_param_format(self, data_1d: list, **kwargs):
         """Init search queue when parameter format is a dict."""
         for i in range(len(data_1d)):
             entities = Entities()
@@ -87,9 +87,10 @@ class EntitiesSearch(object):
             params = self.paramFormat.copy()
             params[self.key] = data_1d[i]
             entities.set_params(params)
+            entities.set_search_params(**kwargs)
             self.search_queue.put(entities)
 
-    def __dict_str_param_format(self, data_1d: list):
+    def __dict_str_param_format(self, data_1d: list, **kwargs):
         """Init search queue when parameter format is a dict."""
         for i in range(len(data_1d)):
             entities = Entities()
@@ -97,6 +98,7 @@ class EntitiesSearch(object):
             params = self.paramFormat.copy()
             params[self.key] = params[self.key] % data_1d[i]
             entities.set_params(params)
+            entities.set_search_params(**kwargs)
             self.search_queue.put(entities)
 
     def __str_param_format(self, data_1d: list):
@@ -122,15 +124,13 @@ class EntitiesSearch(object):
         self.entities_num = len(data_1d)
         if isinstance(self.paramFormat, dict):
             if self.paramFormat[self.key] is None:
-                self.__dict_param_format(data_1d)
+                self.__dict_param_format(data_1d, **kwargs)
             else:
-                self.__dict_str_param_format(data_1d)
+                self.__dict_str_param_format(data_1d, **kwargs)
         elif isinstance(self.paramFormat, str):
             self.__str_param_format(data_1d)
         else:
             raise ValueError("Parameters in querying error.")
-        if kwargs is not None:
-            pass
 
     def __function__(self, cache_: Queue, url: str = None, keys: Union[str, List[str]] = None,
                      timeout: float = 5, function_=None, args: tuple = None):

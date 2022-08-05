@@ -77,6 +77,19 @@ PARAM_BING_SPELL_CHECK = {
 }
 """Parameter format in Bing Spell Check."""
 
+URL_DBPEDIA_SEARCH = "https://lookup.dbpedia.org/api/search"
+"""URL of Dbpedia search API."""
+
+URL_DBPEDIA_PREFIX = "https://lookup.dbpedia.org/api/prefix"
+"""URL of Dbpedia prefix search API."""
+
+PARAM_DBPEDIA_QUERY = {
+    "query": None,
+    "maxResult": 10,
+    "format": "json",
+    "minRelevance": None
+}
+
 
 class SearchManage(EntitiesSearch):
     """Class of querying with Wikidata API using multithread.
@@ -715,3 +728,31 @@ class SpellCheck(EntitiesSearch):
             return []
         self.__remove_none()
         return self.analysis_list
+
+
+class DbpediaLookUp(EntitiesSearch):
+    """Querying keywords using Dbpedia look up tools with multithread.
+
+    :ivar entities_num(int):
+        the number of querying entities
+    :ivar key(string):
+        a string reflecting its feature
+    :ivar keys(Union[list, str, None]):
+        a list or a string reflecting its keywords
+    :ivar m_num(int):
+        the number of thread in querying
+    :ivar search_queue(Queue):
+        consumer queue for init multiple entities(<class,'Entities'>)
+    :ivar re_queue(Queue):
+        producer queue for storing results of multiple entities(<class,'Entities'>)
+    :ivar re_list(list):
+        list of results of multiple entities(<class,'Entities'>)after querying
+        for conveniently getting entities(<class,'Entities'>)
+    :ivar paramFormat(Union[dict,str]):
+        the format of parameters in querying
+    :ivar index_(list):
+        location index getting from expanse of N-dimensional list
+    """
+
+    def __int__(self, m_num: int = 5):
+        super().__init__(key="QueryString", m_num=m_num, paramFormat=None)
