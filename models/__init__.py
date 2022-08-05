@@ -6,5 +6,5 @@
 # @version : V1.0 
 #
 
-from models.entities import RequestAnalysis, Entities
-from models.multithread_query import EntitiesSearch
+from .entities import RequestAnalysis, Entities
+from .multithread_query import EntitiesSearch

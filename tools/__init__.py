@@ -6,5 +6,5 @@
 # @version : V1.0 
 #
 
-from tools.Tools import Tools
-from tools.AnalysisTools import AnalysisTools
+from .Tools import Tools
+from .AnalysisTools import AnalysisTools
