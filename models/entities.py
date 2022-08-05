@@ -11,9 +11,9 @@ import random
 from warnings import warn
 import requests
 from requests import ReadTimeout, Response
-from tools import AnalysisTools
-from tools import Tools
-from tools.Tools import AGENTS_
+from ..tools import AnalysisTools
+from ..tools import Tools
+from ..tools.Tools import AGENTS_
 
 
 class RequestAnalysis(object):
