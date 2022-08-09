@@ -85,15 +85,10 @@ URL_DBPEDIA_PREFIX = "https://lookup.dbpedia.org/api/prefix"
 
 PARAM_DBPEDIA_QUERY = {
     "query": None,
-    "label": None,
-    "comment": None,
-    "category": None,
-    "typeName": None,
     "maxResult": 10,
     "format": "json",
     "minRelevance": None
 }
-"""Parameters using in Dbpedia look up."""
 
 
 class SearchManage(EntitiesSearch):
@@ -278,6 +273,11 @@ class SearchManage(EntitiesSearch):
 
     def analysis_to_dict(self) -> dict:
         """Turn result list of analysis from list[dict] into dict[list].
+
+        Note:
+            When analysis your own entities, you need
+            to override this method which is used for
+            analysis result from Wikidata API.
 
         :return: data of dict[list] from list[dict]
         """
@@ -752,72 +752,7 @@ class DbpediaLookUp(EntitiesSearch):
         the format of parameters in querying
     :ivar index_(list):
         location index getting from expanse of N-dimensional list
-
-    :param key:
-        the key where parameters will be set, choose "query",
-        "label", "comment" or "category". Default: "query"
-    :param m_num:
-        the number of thread you want to set. Default: 5
     """
 
-    def __init__(self, key: str = "query", m_num: int = 5):
-        super().__init__(key=key, m_num=m_num, paramFormat=PARAM_DBPEDIA_QUERY)
-
-    def analysis_to_dict(self) -> dict:
-        """Turn result list of analysis from list[dict] into dict[list].
-
-        :return: data of dict[list] from list[dict]
-        """
-        re_an = dict()
-        for k, v in self.re_list[0].get_analysis.items():
-            re_an[k] = [v]
-        da_: Entities
-        for da_ in self.re_list[1::]:
-            for key, value in da_.get_analysis.items():
-                re_an[key].append(value)
-        return re_an
-
-    def search_run(self, points: list, patten: str = "search", is_all: bool = False, timeout: float = 30.0,
-                   time_stop: float = 30.0, block_num: int = 10, function_=None, args: tuple = (), **kwargs) -> dict:
-        """Run querying using multithread.
-        :param points:
-            N-dimensional list of variable parameters in sparql element
-        :param patten:
-            the patten of querying, choose 'prefix' or 'search'. Default: 'search'
-        :param is_all:
-            return all analysis result or not. Default: False
-        :param timeout:
-            the timeout (in seconds) to use for querying the endpoint. Default: 30.0
-        :param time_stop:
-            blocking time when entities in queue raise exception. Default: 30.0
-        :param block_num:
-            maximum number of repeated running. Default: 10
-        :param function_:
-            your own analysis function. Default: None
-        :param args:
-            the parameters which format is tuple. Default: None
-        :param kwargs:
-            for function expansion
-        :return:
-            a dict of the analysis result
-        """
-        self.init_queue(points, **kwargs)
-        if patten == 'search':
-            url_ = URL_DBPEDIA_SEARCH
-        else:
-            url_ = URL_DBPEDIA_PREFIX
-        if function_ is None:
-            function_ = AnalysisTools.dbpedia_analysis
-            args = (is_all,)
-        print(f'Entities:{self.entities_num}(type:DBpediaLookup&{patten}).Threading number:{self.m_num}.')
-        try:
-            self.multithread_get_(timeout=timeout, time_stop=time_stop, block_num=block_num,
-                                  url=url_, keys=None, function_=function_, args=args)
-        except RuntimeError:
-            warn("Run time error.")
-            return {}
-
-        dict_t = dict()
-        for k_, v_ in self.analysis_to_dict().items():
-            dict_t[k_] = Tools.list_back(v_, self.index_)
-        return dict_t
+    def __int__(self, m_num: int = 5):
+        super().__init__(key="QueryString", m_num=m_num, paramFormat=None)
