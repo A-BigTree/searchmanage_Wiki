@@ -8,4 +8,4 @@
 
 from .models import EntitiesSearch, Entities, RequestAnalysis
 from .tools import Tools, AnalysisTools
-from .SearchManage import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck
+from .SearchManage import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck, DbpediaLookUp

@@ -85,10 +85,15 @@ URL_DBPEDIA_PREFIX = "https://lookup.dbpedia.org/api/prefix"
 
 PARAM_DBPEDIA_QUERY = {
     "query": None,
+    "label": None,
+    "comment": None,
+    "category": None,
+    "typeName": None,
     "maxResult": 10,
     "format": "json",
     "minRelevance": None
 }
+"""Parameters using in Dbpedia look up."""
 
 
 class SearchManage(EntitiesSearch):
@@ -754,5 +759,29 @@ class DbpediaLookUp(EntitiesSearch):
         location index getting from expanse of N-dimensional list
     """
 
-    def __int__(self, m_num: int = 5):
-        super().__init__(key="QueryString", m_num=m_num, paramFormat=None)
+    def __int__(self, key: str = "query", m_num: int = 5):
+        super().__init__(key=key, m_num=m_num, paramFormat=PARAM_DBPEDIA_QUERY)
+
+    def search_run(self, points: list, patten: str = "prefix", timeout: float = 30.0, time_stop: float = 30.0,
+                   block_num: int = 10, function_=None, args: tuple = (), **kwargs) -> dict:
+        """Run querying using multithread.
+        :param points:
+            N-dimensional list of variable parameters in sparql element
+        :param patten:
+            the patten of querying, choose 'prefix' or 'search'. Default: 'prefix'
+        :param timeout:
+            the timeout (in seconds) to use for querying the endpoint. Default: 30.0
+        :param time_stop:
+            blocking time when entities in queue raise exception. Default: 30.0
+        :param block_num:
+            maximum number of repeated running. Default: 10
+        :param function_:
+            your own analysis function. Default: None
+        :param args:
+            the parameters which format is tuple. Default: None
+        :param kwargs:
+            for function expansion
+        :return:
+            a dict of the analysis result
+        """
+        pass

@@ -3,7 +3,7 @@
 # @email   : 213202122@seu.edu.cn
 # @time    : 2022/7/20 
 # @function: the static method in class <AnalysisTools>
-# @version : V0.4.0
+# @version : V0.4.1
 #
 
 from typing import Union, List
@@ -48,6 +48,12 @@ REG = re.compile("/")
 
 PATTEN1 = ['labels', 'descriptions', 'aliases']
 """Analysis keys in patten1"""
+
+DBPEDIA_KEYS1 = [(1, 'label'), (1, 'resource'), (2, 'typeName'), (2, 'type')]
+"""Analysis keys-1 using in Dbpedia look up json data."""
+
+DBPEDIA_KEYS2 = [(1, 'score'), (1, 'refCount'), (1, 'comment'), (2, 'redirectlabel'), (2, 'category')]
+"""Analysis keys-2 using in Dbpedia look up json data."""
 
 
 class AnalysisTools:
@@ -535,4 +541,62 @@ class AnalysisTools:
                 res = soup.find('div', id='sp_requery').a.text
         except Exception as e:
             print(e)
+        return res
+
+    @staticmethod
+    def dbpedia_analysis(request_: Response, is_all: bool = False) -> dict:
+        try:
+            json_ = request_.json()
+        except ValueError:
+            raise ValueError("Json data error.")
+        res = dict()
+        res['resource'] = (None, None)
+        res['type'] = []
+        for da in DBPEDIA_KEYS2:
+            if da[0] == 1:
+                res[da[1]] = None
+            else:
+                res[da[1]] = []
+        try:
+            docs_ = json_['docs']
+            for element in docs_:
+                r1 = None
+                r2 = None
+                try:
+                    r1 = element[DBPEDIA_KEYS1[0][1]][0]
+                except ValueError or IndexError:
+                    pass
+                try:
+                    r2 = element[DBPEDIA_KEYS1[1][1]][0]
+                except ValueError or IndexError:
+                    pass
+                res['resource'] = (r1, r2)
+
+                try:
+                    type_n = element[DBPEDIA_KEYS1[2][1]]
+                except KeyError:
+                    type_n = []
+                try:
+                    type_ = element[DBPEDIA_KEYS1[3][1]]
+                except KeyError:
+                    type_ = []
+                try:
+                    if len(type_) > 0 or len(type_n) > 0:
+                        for i in range(len(type_n)):
+                            res['type'].append((type_n[i], type_[i]))
+                except IndexError:
+                    pass
+
+                for da in DBPEDIA_KEYS2:
+                    try:
+                        if da[0] == 1:
+                            res[da[1]] = element[da[1]][0]
+                        else:
+                            res[da[1]] = element[da[1]]
+                    except KeyError or IndexError:
+                        pass
+        except KeyError:
+            pass
+        if not is_all:
+            return {'resource': res['resource'], 'type': res['type']}
         return res
