@@ -85,10 +85,15 @@ URL_DBPEDIA_PREFIX = "https://lookup.dbpedia.org/api/prefix"
 
 PARAM_DBPEDIA_QUERY = {
     "query": None,
+    "label": None,
+    "comment": None,
+    "category": None,
+    "typeName": None,
     "maxResult": 10,
     "format": "json",
     "minRelevance": None
 }
+"""Parameters using in Dbpedia look up."""
 
 
 class SearchManage(EntitiesSearch):
@@ -273,11 +278,6 @@ class SearchManage(EntitiesSearch):
 
     def analysis_to_dict(self) -> dict:
         """Turn result list of analysis from list[dict] into dict[list].
-
-        Note:
-            When analysis your own entities, you need
-            to override this method which is used for
-            analysis result from Wikidata API.
 
         :return: data of dict[list] from list[dict]
         """
