@@ -570,10 +570,10 @@ class SparqlQuery(EntitiesSearch):
 
     def analysis_to_dict(self) -> dict:
         re_an = dict()
-        for k in self.keys:
-            re_an[k] = []
+        for key, value in self.re_list[0].get_analysis.items():
+            re_an[key] = [value]
         da_: Entities
-        for da_ in self.re_list:
+        for da_ in self.re_list[1::]:
             for key, value in da_.get_analysis.items():
                 re_an[key].append(value)
         return re_an
@@ -819,5 +819,6 @@ class DbpediaLookUp(EntitiesSearch):
         for k_, v_ in self.analysis_to_dict().items():
             dict_t[k_] = Tools.list_back(v_, self.index_)
         if not is_all:
-            return {"resource": dict_t["resource"], "type": dict_t["type"]}
+            return {"label": dict_t["label"], "resource": dict_t["resource"],
+                    "typeName": dict_t["typeName"], "type": dict_t["type"]}
         return dict_t
