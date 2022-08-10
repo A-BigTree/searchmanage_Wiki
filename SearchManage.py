@@ -819,5 +819,6 @@ class DbpediaLookUp(EntitiesSearch):
         for k_, v_ in self.analysis_to_dict().items():
             dict_t[k_] = Tools.list_back(v_, self.index_)
         if not is_all:
-            return {"resource": dict_t["resource"], "type": dict_t["type"]}
+            return {"label": dict_t["label"], "resource": dict_t["resource"],
+                    "typeName": dict_t["typeName"], "type": dict_t["type"]}
         return dict_t
