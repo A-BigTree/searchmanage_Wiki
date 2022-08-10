@@ -550,13 +550,10 @@ class AnalysisTools:
         except ValueError:
             raise ValueError("Json data error.")
         res = dict()
-        res['resource'] = (None, None)
+        res['resource'] = []
         res['type'] = []
         for da in DBPEDIA_KEYS2:
-            if da[0] == 1:
-                res[da[1]] = None
-            else:
-                res[da[1]] = []
+            res[da[1]] = []
         try:
             docs_ = json_['docs']
             for element in docs_:
@@ -570,7 +567,7 @@ class AnalysisTools:
                     r2 = element[DBPEDIA_KEYS1[1][1]][0]
                 except ValueError or IndexError:
                     pass
-                res['resource'] = (r1, r2)
+                res['resource'].append((r1, r2))
 
                 try:
                     type_n = element[DBPEDIA_KEYS1[2][1]]
@@ -580,19 +577,21 @@ class AnalysisTools:
                     type_ = element[DBPEDIA_KEYS1[3][1]]
                 except KeyError:
                     type_ = []
+                t = []
                 try:
                     if len(type_) > 0 or len(type_n) > 0:
                         for i in range(len(type_n)):
-                            res['type'].append((type_n[i], type_[i]))
+                            t.append((type_n[i], type_[i]))
                 except IndexError:
                     pass
+                res['type'].append(t)
 
                 for da in DBPEDIA_KEYS2:
                     try:
                         if da[0] == 1:
-                            res[da[1]] = element[da[1]][0]
+                            res[da[1]].append(element[da[1]][0])
                         else:
-                            res[da[1]] = element[da[1]]
+                            res[da[1]].append(element[da[1]])
                     except KeyError or IndexError:
                         pass
         except KeyError:
