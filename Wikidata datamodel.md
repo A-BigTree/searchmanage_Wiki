@@ -10,6 +10,41 @@
 
 ------
 
+***目录***
+
+- [前言](#前言)
+- [官方API使用](#官方API使用)
+  - [`action` = `wbsearchentities`](#`action`-=-`wbsearchentities`)
+  	- [参数设置](#参数设置)
+  	- [查询过程](#查询过程)
+  	- [json数据解析](#json数据解析)
+  - [`action`=`wbgetentities`](#`action`=`wbgetentities`)
+  	- [参数设置](#参数设置)
+  	- [查询过程](#查询过程)
+  	- [json数据解析](#json数据解析)
+- [维基百科数据模型（Wikidata datamodel）](#维基百科数据模型（Wikidata-datamodel）)
+- [ch1.基本数据模型（Datamodel）](#ch1.基本数据模型（Datamodel）)
+- [---> ch2.label(实体名称)](#--->-ch2.label(实体名称))
+- [---> ch3.aliases(别名)](#--->-ch3.aliases(别名))
+- [---> ch4.descriptions(描述)](#--->-ch4.descriptions(描述))
+- [---> ch5.claims(属性)⭐](#--->-ch5.claims(属性)⭐)
+  - [--> ch5.1 datatype(数据类型)](#-->-ch5.1-datatype(数据类型))
+  - [--> ch5.2 valuetype(值类型)](#-->-ch5.2-valuetype(值类型))
+  	- [wikibase-entityid(维基数据实体id值)](#wikibase-entityid(维基数据实体id值))
+  	- [globecoordinate(地理位置)](#globecoordinate(地理位置))
+  	- [time(时间)](#time(时间))
+  	- [string(字符串)](#string(字符串))
+  	- [monolingualtext(未翻译文本)](#monolingualtext(未翻译文本))
+  	- [quantity(十进制数字)](#quantity(十进制数字))
+  - [--> ch 5.3 qualifiers-order(限定词顺序)](#-->-ch-5.3-qualifiers-order(限定词顺序))
+  - [--> ch 5.4 qualifiers(限定词)](#-->-ch-5.4-qualifiers(限定词))
+  - [--> ch 5.5 references(引用)](#-->-ch-5.5-references(引用))
+- [---> ch6.sitelinks(外部链接)](#--->-ch6.sitelinks(外部链接))
+- [Example](#Example)
+  - [部分`claims`](#部分`claims`)
+  - [`sitelinks`](#`sitelinks`)
+
+
 
 # 前言
 
