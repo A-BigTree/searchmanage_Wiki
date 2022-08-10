@@ -70,6 +70,7 @@ classDiagram
 	SparqlQuery --|> EntitiesSearch:继承
 	BingQuery --|> EntitiesSearch:继承
 	SpellCheck --|> EntitiesSearch:继承
+	DbpediaLookUp --|> EntitiesSearch:继承
 
 	class Tools{
 	@ staticmethod
@@ -122,6 +123,10 @@ classDiagram
 	
 	class SpellCheck{
 	- url_
+	}
+	
+	class DbpediaLookUp{
+	
 	}
 ```
 
