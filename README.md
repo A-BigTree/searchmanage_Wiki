@@ -3,7 +3,7 @@
 - **author  : Shuxin_Wang**
 - **email   : 213202122@seu.edu.cn**
 - **time    : 2022/6/2**
-- **version: 0.4.5**
+- **version: 0.4.6**
 
 
 
@@ -35,7 +35,7 @@
 
 ## V0.4
 
-- 新增类`SparqlQuery`进行多线程*Sparql*查询；
+- 新增类`SparqlQuery`可进行自定义多线程*SPARQL*查询；
 - 新增类`BingQuery`多线程爬取模糊搜索结果
 - 工具函数作为工具**类下的静态方法**；
 - 类`Entities`继承类`JsonAnalysis`，类`Wikipedia`继承类`EntitiesSearch`；
@@ -50,6 +50,11 @@
 
 - 重新整理文件目录和模块结构；
 - 完成全英注释；
+
+## v0.4.6
+
+- 新增类`DbpediaLookUp`针对DBpedia知识图谱的多线程查询；
+- 修改部分bug；
 
 
 
@@ -172,6 +177,30 @@ m_num(int): 指定线程数目;
   - `**kwargs`：可以**用来修改查询参数字典中的值**，比如我们要修改返回值数量('limit')为20，可以直接将`limit = 20`作为**函数参数**，修改其他查询参数同理；
 - 返回`(dict)`
   - 解析关键词为键值，对应值为**对应位置映射**的解析结果；
+
+### 解析关键词规范
+
+1. labels,descriptions,aliases
+
+   以`labels`为例子
+
+   - `labels`,`labels/`,`labels//`→labels下字典
+   - `labels/xx`→`xx`语言下的值
+
+2. claims
+
+   - `claims`,`claims/`,`claims//`→claims下字典
+   - `claims/P`,`claims/P/`,`claims/P//`→属性ID列表
+   - `claims/P/value`→所有属性下的值，**值的格式为元组**，(`值类型`，`主值1`, ···)
+   - `claims/Pxx`,`claims/Pxx/`,`claims/Pxx//`→`Pxx`下的字典
+   - `claims/Pxx/value`→`Pxx`的具体值，**值的格式为元组**，(`值类型`，`主值1`, ···)
+   - `claims/Pxx/qualifiers-order`→`Pxx`限定词顺序列表
+   - `claims/Pxx/qualifiers`,`claims/Pxx/qualifiers/`,`claims/Pxx/qualifiers//`→`Pxx`限定词下字典
+   - `claims/Pxx/references`,`claims/Pxx/references/`,`claims/Pxx/references//`→`Pxx`引用下字典
+
+3. sitelinks
+
+   - `sitelinks`,`sitelinks/`,`sitelinks//`→外部链接下的字典
 
 ### 查询参数字典
 
@@ -377,29 +406,64 @@ def search_run(self, points: list, timeout: float = 30.0, time_stop: float = 30.
 
 
 
-# 解析关键词规范
+## \<DbpediaLookUp>
 
-1. labels,descriptions,aliases
+### 导入初始化
 
-   以`labels`为例子
+```python
+from searchmanage_Wiki import DbpediaLookup
 
-   - `labels`,`labels/`,`labels//`→labels下字典
-   - `labels/xx`→`xx`语言下的值
+db = DbpediaLookUp(m_num=10)
+"""
+key(str):
+	针对实体某部分进行搜索，可选"query","label", "comment" 
+	or "category", 默认为全局搜索"query";
+m_num(int):指定运行线程数量;
+"""
+```
 
-2. claims
+### 重要方法说明
 
-   - `claims`,`claims/`,`claims//`→claims下字典
-   - `claims/P`,`claims/P/`,`claims/P//`→属性ID列表
-   - `claims/P/value`→所有属性下的值，**值的格式为元组**，(`值类型`，`主值1`, ···)
-   - `claims/Pxx`,`claims/Pxx/`,`claims/Pxx//`→`Pxx`下的字典
-   - `claims/Pxx/value`→`Pxx`的具体值，**值的格式为元组**，(`值类型`，`主值1`, ···)
-   - `claims/Pxx/qualifiers-order`→`Pxx`限定词顺序列表
-   - `claims/Pxx/qualifiers`,`claims/Pxx/qualifiers/`,`claims/Pxx/qualifiers//`→`Pxx`限定词下字典
-   - `claims/Pxx/references`,`claims/Pxx/references/`,`claims/Pxx/references//`→`Pxx`引用下字典
+```python
+def search_run(self, points: list, patten: str = "search", is_all: bool = False, timeout: float = 30.0,
+                   time_stop: float = 30.0, block_num: int = 10, function_=None, args: tuple = (), **kwargs) -> dict
+```
 
-3. sitelinks
+- 输入N维文本列表，多线程查询并根据解析关键词返回解析结果
+- 参数说明
+  - `points(list)`：N维文本列表；
+  - `patten(str)`：查询模式，可选`'search'`或`'prefix'`，其中`'prefix'`为前缀搜索，对应URL为`"https://lookup.dbpedia.org/api/prefix"`，默认为普通搜索为`'search'`，对应URL为`"https://lookup.dbpedia.org/api/search"`；
+  - `is_all(bool)`：是否返回所有解析结果，解析键值见[查询参数字典与解析键值](#查询参数字典与解析键值)，默认为`False`，返回解析键值的前四个；
+  - `timeout(float)`：每个线程查询的最大限制时间，到超过这个时间，会视为查询失败，默认为`30.0`；
+  - `time_stop(float)`：当某个线程查询失败时，会进行重新查询，该参数表示进行重新查询的间隔时间，默认为`30.0`；
+  - `block_num(int)`：查询失败进行重新查询的最大次数，当达到最大次数时，返回`RunTimeError`异常，默认`10`；
+  - `function_(function)`：自定义解析函数；函数要求：第一个参数为待解析`json`数据；当值为`None`时，使用默认解析方法，默认为`None`；
+  - `args(tuple)`：自定义解析函数的**除第一个参数的其他参数元组**，默认为`None`；
+  - `**kwargs`：可以**用来修改查询参数字典中的值**，比如我们要修改返回值数量(`'maxResults'`)为20，可以直接将`maxResults = 20`作为**函数参数**，修改其他查询参数同理，查询参数见[查询参数字典与解析键值](#查询参数字典与解析键值)；
+- 返回`(dict)`
+  - 解析键值为键值，对应值为**对应位置映射**的解析结果；
 
-   - `sitelinks`,`sitelinks/`,`sitelinks//`→外部链接下的字典
+### 查询参数字典与解析键值
+
+```python
+# 查询字典格式
+PARAM_DBPEDIA_QUERY = {
+    "query": None,
+    "label": None,
+    "comment": None,
+    "category": None,
+    "typeName": None,
+    "maxResult": 10,
+    "format": "json",
+    "minRelevance": None
+}
+"""Parameters using in Dbpedia look up."""
+
+# 解析键值列表，元组第一位为1表明结果为单数，为2说明结果为复数，以列表形式存在
+DBPEDIA_KEYS = [(1, 'label'), (1, 'resource'), (2, 'typeName'), (2, 'type'), (1, 'score'),
+                (1, 'refCount'), (1, 'comment'), (2, 'redirectlabel'), (2, 'category')]
+"""Analysis keys using in Dbpedia look up json data."""
+```
 
 
 
@@ -505,6 +569,22 @@ if __name__ == "__main__":
     sc = SpellCheck(m_num=12)
     r6 = sc.search_run(p3)
     print(r6)
+	
+    # DbpediaLookUp->"resource"
+    db = DbpediaLookUp(m_num=10)
+    r7 = db.search_run(p1, patten='search', is_all=False, maxResults=20)
+    print(r7['resource'])
 
+    # Dbpedia SPARQL
+    end_point = "https://dbpedia.org/sparql"
+    sparql_ = """
+        SELECT?Type?Rtype
+        WHERE{
+        <%s> dbp:type ?Type;
+             rdf:type ?Rtype.}
+        """
+    sql2 = SparqlQuery(m_num=200, format_='json', url_=end_point, sparql_=sparql_)
+    r8 = sql2.search_run(r7['resource'], timeout=10000)
+    print(r8['Type'])
 ```
 
