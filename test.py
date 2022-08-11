@@ -6,7 +6,7 @@
 # @version : V0.4.5
 #
 
-from searchmanage_Wiki import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck, DbpediaLookUp
+from searchmanage import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck, DbpediaLookUp
 
 if __name__ == "__main__":
     # Example data
