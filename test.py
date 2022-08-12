@@ -3,10 +3,10 @@
 # @email   : 213202122@seu.edu.cn
 # @time    : 2022/7/21
 # @function: test for searchmanage
-# @version : V0.4.5
+# @version : V0.4.6
 #
 
-from searchmanage import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck, DbpediaLookUp
+from searchmanage import Tools, SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck, DbpediaLookUp
 
 if __name__ == "__main__":
     # Example data
@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     # BingQuery: <url_ = BingQuery.URL_>
     b1 = BingQuery(m_num=24)
-    r5 = b1.search_run(p1[0], timeout=100)
+    # r5 = b1.search_run(p1[0], timeout=100)
     # print(r5)
 
     p3 = [["elgant palm trre garden", "elgant palm trre", "the southeast university"],
@@ -46,8 +46,8 @@ if __name__ == "__main__":
           ["elgat palm trre garden", "elgat palm trre", "the sothaast univrsity"]]
     # SpellCheck <url_ = "https://www.bing.com/search">
     sc = SpellCheck(m_num=12)
-    r6 = sc.search_run(p3, timeout=60)
-    print(r6)
+    # r6 = sc.search_run(p3, timeout=60)
+    # print(r6)
 
     # DbpediaLookUp->"resource"
     db = DbpediaLookUp(m_num=10)
@@ -62,6 +62,13 @@ if __name__ == "__main__":
         <%s> dbp:type ?Type;
              rdf:type ?Rtype.}
         """
-    sql2 = SparqlQuery(m_num=200, format_='json', url_=end_point, sparql_=sparql_)
-    r8 = sql2.search_run(r7['resource'], timeout=10000)
+    sparql_2 = """
+        SELECT*
+        WHERE{
+        <%s> ?p ?v.}
+    """
+    sql2 = SparqlQuery(m_num=200, format_='json', url_=end_point, sparql_=sparql_2)
+    r8 = sql2.search_run(r7['resource'][0], timeout=10000)
     # print(r8['Type'])
+    print(r8['p'])
+    Tools.hierarchical_structure(r8)
