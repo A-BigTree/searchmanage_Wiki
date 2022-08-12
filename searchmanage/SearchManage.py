@@ -219,8 +219,8 @@ class SearchManage(EntitiesSearch):
         m_num = self.m_num
         if m_num > len(points):
             m_num = len(points)
+        self.entities_num = len(points)
         search_en, re_en = Tools.threads_allocation(points, m_num)
-        self.entities_num = len(search_en)
         for i in range(len(search_en)):
             entities = Entities()
             entities.set_entities(i, re_en[i])
@@ -717,7 +717,7 @@ class SpellCheck(EntitiesSearch):
     def search_run(self, points: list, timeout: float = 30.0, time_stop: float = 30.0,
                    block_num: int = 10, function_=None, args: tuple = (), **kwargs) -> list:
         self.init_queue(points, **kwargs)
-        print(f'Entities:{self.entities_num}(type: spell check with bing). Threading number:{self.m_num}.')
+        print(f'Entities:{self.entities_num}(type: SpellCheck<{self.__url_}>). Threading number:{self.m_num}.')
         if function_ is None:
             function_ = AnalysisTools.spell_check_bing
         try:
