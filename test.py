@@ -3,7 +3,7 @@
 # @email   : 213202122@seu.edu.cn
 # @time    : 2022/7/21
 # @function: test for searchmanage
-# @version : V0.4.5
+# @version : V0.4.6
 #
 
 from searchmanage import SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck, DbpediaLookUp
