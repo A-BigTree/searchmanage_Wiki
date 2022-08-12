@@ -89,7 +89,7 @@ PARAM_DBPEDIA_QUERY = {
     "comment": None,
     "category": None,
     "typeName": None,
-    "maxResult": 10,
+    "maxResults": 10,
     "format": "json",
     "minRelevance": None
 }

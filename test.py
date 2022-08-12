@@ -6,7 +6,8 @@
 # @version : V0.4.6
 #
 
-from searchmanage import Tools, SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck, DbpediaLookUp
+from searchmanage import Tools, SearchManage, Wikipedia, SparqlQuery, BingQuery, SpellCheck, DbpediaLookUp, \
+    AnalysisTools
 
 if __name__ == "__main__":
     # Example data
@@ -41,17 +42,9 @@ if __name__ == "__main__":
     # r5 = b1.search_run(p1[0], timeout=100)
     # print(r5)
 
-    p3 = [["elgant palm trre garden", "elgant palm trre", "the southeast university"],
-          ["elgant", "elgant trre", "the sotheast univrssity"],
-          ["elgat palm trre garden", "elgat palm trre", "the sothaast univrsity"]]
-    # SpellCheck <url_ = "https://www.bing.com/search">
-    sc = SpellCheck(m_num=12)
-    # r6 = sc.search_run(p3, timeout=60)
-    # print(r6)
-
     # DbpediaLookUp->"resource"
     db = DbpediaLookUp(m_num=10)
-    r7 = db.search_run(p1, patten='search', is_all=False, maxResults=20)
+    # r7 = db.search_run(p1, patten='search', is_all=False, maxResults=20)
     # print(r7['resource'])
 
     # Dbpedia SPARQL
@@ -59,7 +52,7 @@ if __name__ == "__main__":
     sparql_ = """
         SELECT?Type?Rtype
         WHERE{
-        <%s> dbp:type ?Type;
+        <%s> dbo:type ?Type;
              rdf:type ?Rtype.}
         """
     sparql_2 = """
@@ -68,7 +61,19 @@ if __name__ == "__main__":
         <%s> ?p ?v.}
     """
     sql2 = SparqlQuery(m_num=200, format_='json', url_=end_point, sparql_=sparql_2)
-    r8 = sql2.search_run(r7['resource'][0], timeout=10000)
-    # print(r8['Type'])
-    print(r8['p'])
-    Tools.hierarchical_structure(r8)
+    # r8 = sql2.search_run(r7['resource'][0], timeout=10000)
+    # Tools.hierarchical_structure(r8)
+
+    p3 = [['ibreprophen'], ["elgant palm trre garden", "elgant palm trre", "the southeast university"],
+          ["elgant", "elgant trre", "the sotheast univrssity"],
+          ["elgat palm trre garden", "elgat palm trre", "the sothaast univrsity"]]
+
+    # SpellCheck <url_ = "https://www.bing.com/search">
+    sc = SpellCheck(m_num=12)
+    r6 = sc.search_run(p3, timeout=60)
+    print(r6)
+
+    # SpellCheck<url_ = "https://www.ask.com/web">
+    sc2 = SpellCheck(url_="https://www.ask.com/web", m_num=20)
+    r9 = sc2.search_run(p3, function_=AnalysisTools.ask_analysis)
+    print(r9)

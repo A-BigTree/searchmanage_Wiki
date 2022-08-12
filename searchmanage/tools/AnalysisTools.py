@@ -8,6 +8,7 @@
 
 from typing import Union, List
 from warnings import warn
+import lxml.etree
 from bs4 import BeautifulSoup
 from requests import Response
 import re
@@ -566,4 +567,16 @@ class AnalysisTools:
                             res[da[1]].append([])
         except KeyError:
             pass
+        return res
+
+    @staticmethod
+    def ask_analysis(request_: Response):
+        res = None
+        # print(request_.url)
+        try:
+            xpath_data = lxml.etree.HTML(request_.text)
+            res = xpath_data.xpath("//main/div/div[1]/section/div/div[1]/a/text()")[0]
+            # print(res)
+        except Exception as e:
+            print(e)
         return res
