@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     # DbpediaLookUp->"resource"
     db = DbpediaLookUp(m_num=10)
-    # r7 = db.search_run(p1, patten='search', is_all=False, maxResults=20)
+    r7 = db.search_run(p1, patten='search', is_all=False, maxResults=20)
     # print(r7['resource'])
 
     # Dbpedia SPARQL
