@@ -618,4 +618,3 @@ if __name__ == "__main__":
     r8 = sql2.search_run(r7['resource'], timeout=10000)
     print(r8['Type'])
 ```
-
