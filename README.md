@@ -185,13 +185,13 @@ classDiagram
 ### 导入与初始化
 
 ```python
-from searchmanage_Wiki import SearchManage
+from searchmanage import SearchManage
 
 search_m1 = SearchManage(key='search', m_num=20)
 search_m2 = SearchManage(key='ids', m_num=10)
 """
 url_api(str): 查询网址，默认为"https://www.wikidata.org/w/api.php";
-key(str): 查询action,'search'或者'ids';
+key(str): 查询action,'search' 或者 'ids';
 m_num(int): 指定线程数目;
 """
 ```
@@ -282,7 +282,7 @@ m_num(int): 指定线程数目;
 ### 导入与初始化
 
 ```python
-from searchmanage_Wiki import Wikipedia
+from searchmanage import Wikipedia
  
 w1 = Wikipedia(m_num = 10)
 """
@@ -321,7 +321,7 @@ m_num(int):指定运行线程数量
 ### 导入与初始化
 
 ```python
-from searchmanage_Wiki import SparqlQuery
+from searchmanage import SparqlQuery
 
 sql = SparqlQuery(m_num = 10, format_ = 'json')
 """
@@ -380,7 +380,7 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
 ### 导入与初始化
 
 ```python
-from searchmanage_Wiki import BingQuery
+from searchmanage import BingQuery
 
 b = BingQuery(m_num = 10)
 """
@@ -415,7 +415,7 @@ def search_run(self, points: list, timeout: float = 30.0, time_stop: float = 30.
 ### 导入初始化
 
 ```python
-from searchmanage_Wiki import SpellCheck
+from searchmanage import SpellCheck
 
 sc = SpellCheck(m_num = 10)
 """
@@ -450,7 +450,7 @@ def search_run(self, points: list, timeout: float = 30.0, time_stop: float = 30.
 ### 导入初始化
 
 ```python
-from searchmanage_Wiki import DbpediaLookup
+from searchmanage import DbpediaLookUp
 
 db = DbpediaLookUp(m_num=10)
 """
@@ -554,15 +554,7 @@ data_type = {
 # Example
 
 ```python
-# -*- coding:utf-8 -*-
-# @author  : Shuxin_Wang
-# @email   : 213202122@seu.edu.cn
-# @time    : 2022/7/21 
-# @function: test for searchmanage
-# @version : V0.4.1
-#
-
-from searchmanage import SearchManage, Wikipedia, SparqlQuery, BingQuery, Tools, SpellCheck
+from searchmanage import SearchManage, Wikipedia, SparqlQuery, BingQuery, Tools, SpellCheck, DbpediaLookUp
 
 if __name__ == "__main__":
     # Read data from csv
