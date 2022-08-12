@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     # BingQuery: <url_ = BingQuery.URL_>
     b1 = BingQuery(m_num=24)
-    # r5 = b1.search_run(p1[0], timeout=100)
+    r5 = b1.search_run(p1[0], timeout=100)
     # print(r5)
 
     p3 = [["elgant palm trre garden", "elgant palm trre", "the southeast university"],
@@ -46,13 +46,13 @@ if __name__ == "__main__":
           ["elgat palm trre garden", "elgat palm trre", "the sothaast univrsity"]]
     # SpellCheck <url_ = "https://www.bing.com/search">
     sc = SpellCheck(m_num=12)
-    # r6 = sc.search_run(p3, timeout=60)
-    # print(r6)
+    r6 = sc.search_run(p3, timeout=60)
+    print(r6)
 
     # DbpediaLookUp->"resource"
     db = DbpediaLookUp(m_num=10)
     r7 = db.search_run(p1, patten='search', is_all=False, maxResults=20)
-    print(r7['resource'])
+    # print(r7['resource'])
 
     # Dbpedia SPARQL
     end_point = "https://dbpedia.org/sparql"
@@ -64,4 +64,4 @@ if __name__ == "__main__":
         """
     sql2 = SparqlQuery(m_num=200, format_='json', url_=end_point, sparql_=sparql_)
     r8 = sql2.search_run(r7['resource'], timeout=10000)
-    print(r8['Type'])
+    # print(r8['Type'])
