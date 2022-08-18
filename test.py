@@ -45,7 +45,8 @@ if __name__ == "__main__":
     # DbpediaLookUp->"resource"
     db = DbpediaLookUp(m_num=10)
     r7 = db.search_run(p1, patten='search', is_all=False, maxResults=20)
-    # print(r7['resource'])
+    Tools.hierarchical_structure(r7)
+    print(r7['resource'])
 
     # Dbpedia SPARQL
     end_point = "https://dbpedia.org/sparql"
@@ -70,10 +71,10 @@ if __name__ == "__main__":
 
     # SpellCheck <url_ = "https://www.bing.com/search">
     sc = SpellCheck(m_num=12)
-    r6 = sc.search_run(p3, timeout=60)
-    print(r6)
+    # r6 = sc.search_run(p3, timeout=60)
+    # print(r6)
 
     # SpellCheck <url_ = "https://www.ask.com/web">
     sc2 = SpellCheck(url_="https://www.ask.com/web", m_num=20)
-    r9 = sc2.search_run(p3, function_=AnalysisTools.ask_analysis)
-    print(r9)
+    # r9 = sc2.search_run(p3, function_=AnalysisTools.ask_analysis)
+    # print(r9)
