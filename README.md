@@ -96,7 +96,7 @@
 - 新增类`DbpediaLookUp`针对DBpedia知识图谱的多线程查询；
 - 修改部分bug；
 
-## v0.4.6
+## v0.4.7
 - 可通过爬取ask(`https://www.ask.com/web`)搜索进行`SpellCheck`，并提供相应解析函数`AnalysisTools.ask_analysis`；
 
 # 模块视图
