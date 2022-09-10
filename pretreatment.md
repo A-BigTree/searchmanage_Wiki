@@ -17,6 +17,10 @@
     
     "col": "$列数",
     
+    "keyColumnIndex": 0,
+    
+    "columnsType": ["列类别1", "..."]
+    
     "data":[
         {
             "canSearch": true,
