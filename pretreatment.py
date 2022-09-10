@@ -5,8 +5,8 @@
 # @function: the script is used to do something.
 # @version : V1.0 
 #
-import warnings
 
+import warnings
 import Levenshtein
 from searchmanage import SpellCheck, SearchManage, Tools, DbpediaLookUp
 import json
