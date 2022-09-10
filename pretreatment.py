@@ -353,7 +353,7 @@ class CSVPretreatment(JsonDataManage):
         pass
 
     @staticmethod
-    def correct_model_ask(entities:list) -> list:
+    def correct_model_ask(entities: list) -> list:
         pass
 
     def search_process(self):
