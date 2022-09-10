@@ -334,7 +334,7 @@ class CSVPretreatment(JsonDataManage):
                 key_select = i
         self.json_["keyColumnIndex"] = key_select
 
-    def correct_process(self):
+    def correct_process(self, max_batch: int = 50):
         pass
 
     def search_process(self):

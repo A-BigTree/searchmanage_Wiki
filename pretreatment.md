@@ -44,11 +44,13 @@ class CSVPretreatment{
     
     "keyColumnIndex": 0,
     
-    "columnsType": ["列类别1", "..."]
+    "columnsType": ["列类别1", "..."],
     
     "data":[
+        //可查询列
         {
             "canSearch": true,
+            "type": "$列数据类型",
             "column":[
                 {
                     "isNo": false,
@@ -74,11 +76,16 @@ class CSVPretreatment{
                         "..."
                     ]
                 },
-
-            ],
-            "type": "$列数据类型"
+            ]
         },
-        
+        //不可查询列
+        {
+            "canSearch": false,
+            "column":[
+                "$源值1", 
+                "..."
+                ]         
+        }, 
     ]
 }
 ```
@@ -102,5 +109,6 @@ class CSVPretreatment{
 
 1. 初步识别每列数据的数据类型，同时筛选可查询实体，即排除数字、日期时间等属性列，并同时找出主题列；
 2. 对**可查询列**数据进行拼写纠错；
-3. 
+3. 对纠错完的结果进行`text→IRIs`查询；
+4. 保存json文件
 
