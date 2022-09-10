@@ -8,6 +8,7 @@
 
 import warnings
 import Levenshtein
+from typing import Union
 from searchmanage import SpellCheck, SearchManage, Tools, DbpediaLookUp
 import json
 # import pandas as pd
@@ -170,9 +171,10 @@ class JsonDataManage(object):
             warnings.warn("No key = %s in json data." % key)
             key = "value"
         if self.can_column_search(j):
+            if self.json_["data"][j]["column"][i]["isNone"]:
+                return "None"
             return self.json_["data"][j]["column"][i][key]
-        else:
-            return self.json_["data"][j]["column"][i]
+        return self.json_["data"][j]["column"][i]
 
     @property
     def shape(self) -> tuple:
@@ -195,7 +197,8 @@ class JsonDataManage(object):
         return self.json_["data"]
 
     def __str__(self):
-        return "[row %d× col %d]\nKey column index: %d\n"
+        return "[row %d× col %d]\nKey column index: %d\nColumns category: " % (
+            self.shape[0], self.shape[1], self.key_column_index) + self.column_types.__str__()
 
 
 class CSVPretreatment(JsonDataManage):
@@ -338,6 +341,19 @@ class CSVPretreatment(JsonDataManage):
         self.json_["keyColumnIndex"] = key_select
 
     def correct_process(self, max_batch: int = 50):
+        """The process of word correction.
+
+        :param max_batch:
+            max number of entity in once batch for word correction
+        """
+        pass
+
+    @staticmethod
+    def correct_model_bing(entities: list) -> list:
+        pass
+
+    @staticmethod
+    def correct_model_ask(entities:list) -> list:
         pass
 
     def search_process(self):
@@ -355,4 +371,4 @@ if __name__ == "__main__":
     # print(c_.json_)
     # nlp = spacy.load('en_core_web_sm')
     # print(nlp.pipe_labels)
-    print("abc" + [1, 2, 3, 4].__str__())
+    print([] + [4, 5, 6])
