@@ -5,6 +5,31 @@
 
 
 
+# 模块视图
+
+```mermaid
+classDiagram
+
+CSVPretreatment..|>JsonDataManage:继承
+
+class JsonDataManage{
++josn_
+}
+
+class CSVPretreatment{
++csv_data
++search_index
++nlp
++relative_path
++csv_or_json_file
++file_type
+
++init_json_process()
++correct_process()
++search_process()
+}
+```
+
 # 预处理JSON文件约定
 
 - `xxx.csv → xxx.json`
@@ -51,15 +76,19 @@
                 },
 
             ],
-            "type": "$列数据类型(字符串string、数值型number、日期datetime、不可搜索:n)"
+            "type": "$列数据类型"
         },
         
     ]
 }
-
 ```
 
-- `csv_data[i][j] → json_data["data"][j]["column"][i]["value"]`
+- `json_data["data"][j]["canSearch"] is True`
+  - `csv_data[i][j] → json_data["data"][j]["column"][i]["value"]`
+
+- `json_data["data"][j]["canSearch"] is False`
+  - `csv_data[i][j] → json_data["data"][j]["column"`][i]
+
 
 
 
@@ -68,4 +97,10 @@
 
 
 ## 初始化设置
+
+- 以每列数据为基本单位；
+
+1. 初步识别每列数据的数据类型，同时筛选可查询实体，即排除数字、日期时间等属性列，并同时找出主题列；
+2. 对**可查询列**数据进行拼写纠错；
+3. 
 

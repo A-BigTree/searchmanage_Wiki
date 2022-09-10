@@ -65,19 +65,78 @@ class JsonDataManage(object):
         """Get json data."""
         return self.json_
 
-    def init_json(self, json_file_path: str):
+    def init_json(self, json_file_path: str) -> dict:
         """Init the json data from s json file.
 
         :param json_file_path: the path of json file
+
+        :raise ValueError: read json file failed
+
+        :return: json data read from json file.
         """
-        pass
+        try:
+            with open(json_file_path, mode="r+", encoding="utf-8") as f:
+                self.json_ = json.load(f)
+        except Exception as e:
+            print(e)
+            raise ValueError("Read json file %s failed." % json_file_path)
+        return self.json_
 
     def write_json(self, json_file_pah: str):
         """write json data to a json file.
 
         :param json_file_pah: the json file path where json data will be written
+
+        :raise ValueError: write json file failed
         """
-        pass
+        try:
+            with open(json_file_pah, mode="w+", encoding="utf-8") as f:
+                json.dump(self.json_, f)
+        except Exception as e:
+            print(e)
+            raise ValueError("Write json file %s failed." % json_file_pah)
+
+    def get_column_values(self, col_index: int) -> list:
+        """Get a list original values from a column.
+
+        :param col_index: the index of column data you want to get
+
+        :raise IndexError: col_index is greater than number of json data column
+        """
+        if col_index >= self.json_["col"]:
+            raise IndexError("Json data only has %d columns." % self.json_["col"])
+
+        if self.json_["data"][col_index]["canSearch"]:
+            re_ = []
+            for da_ in self.json_["data"][col_index]["column"]:
+                if da_["isNone"]:
+                    re_.append("None")
+                else:
+                    re_.append(da_["value"])
+        else:
+            return self.json_["data"][col_index]["column"]
+
+        return list()
+
+    @property
+    def shape(self) -> tuple:
+        """Get the shape of the table."""
+        return tuple([self.json_["row"], self.json_["col"]])
+
+    @property
+    def key_column_index(self) -> int:
+        """Get the index of key column."""
+        return self.json_["keyColumnIndex"]
+
+    @property
+    def column_types(self) -> list:
+        """Get columns' type."""
+        return self.json_["columnsType"]
+
+    @property
+    def data(self) -> list:
+        """Get data details."""
+        return self.json_["data"]
 
 
 class CSVPretreatment(JsonDataManage):
