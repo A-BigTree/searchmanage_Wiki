@@ -57,6 +57,7 @@ class CSVPretreatment(object):
     :ivar frame_: the DataFrame of csv data
     :ivar json_: the result of json data
     :ivar search_index: the index of column for word correcting and search
+    :ivar nlp: the nlp model loading from spacy
     """
 
     def __init__(self, relative_path: str, csv_or_json_file: str):
