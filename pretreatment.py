@@ -9,7 +9,7 @@
 import Levenshtein
 from searchmanage import SpellCheck, SearchManage, Tools, DbpediaLookUp
 import json
-import pandas as pd
+# import pandas as pd
 import spacy
 
 JSON_FORMAT = {
@@ -48,8 +48,40 @@ REMOVE_CHAR = [" ", ",", ":", ".", "-", "million", "→", "[", "]", "(",
                "october", "oct", "november", "nov", "december", "dec"]
 
 
-class CSVPretreatment(object):
-    """The class for manage of pretreatment.
+class JsonDataManage(object):
+    """The class for manage of json data.
+
+    :ivar self.json_: the json data for analysis
+    """
+
+    def __init__(self):
+        self.json_ = None
+
+    def set_json(self, json_: dict):
+        """Set json data."""
+        self.json_ = json_
+
+    def get_json(self) -> dict:
+        """Get json data."""
+        return self.json_
+
+    def init_json(self, json_file_path: str):
+        """Init the json data from s json file.
+
+        :param json_file_path: the path of json file
+        """
+        pass
+
+    def write_json(self, json_file_pah: str):
+        """write json data to a json file.
+
+        :param json_file_pah: the json file path where json data will be written
+        """
+        pass
+
+
+class CSVPretreatment(JsonDataManage):
+    """The class for manage of csv file pretreatment.
 
     :ivar relative_path: the relative path of csv file
     :ivar csv_or_json_file: the name of csv file
@@ -61,9 +93,9 @@ class CSVPretreatment(object):
     """
 
     def __init__(self, relative_path: str, csv_or_json_file: str):
+        super().__init__()
         self.csv_data = None
         self.frame_ = None
-        self.json_ = None
         self.search_index = None
 
         self.nlp = spacy.load("en_core_web_sm")
@@ -76,7 +108,7 @@ class CSVPretreatment(object):
             self.init_json_process()
         else:
             self.file_type = "json"
-            self.init_json()
+            self.init_json(self.relative_path + self.csv_or_json_file)
 
     def init_csv(self):
         # self.frame_ = pd.read_csv(self.relative_path + self.csv_or_json_file)
@@ -93,14 +125,12 @@ class CSVPretreatment(object):
         }
         self.search_index = list()
 
-    def init_json(self):
-        pass
-
     def init_json_process(self):
         self.judge_columns_category()
 
     @staticmethod
     def is_no_search_entities(entities: list) -> bool:
+        """Judge whether csv data columns can be searched."""
         flag = 0
         pos: str
         for pos in entities:
@@ -118,7 +148,7 @@ class CSVPretreatment(object):
             return False
 
     def judge_columns_category(self):
-
+        """Judge the category of all tables columns."""
         search_index = []
         # judge all columns type
         for col_index in range(len(self.csv_data)):
@@ -194,15 +224,8 @@ class CSVPretreatment(object):
     def search_process(self):
         pass
 
-    def write_json(self):
-        pass
-
 
 class PretreatmentManage(object):
-    pass
-
-
-class JsonDataManage(object):
     pass
 
 
@@ -210,6 +233,6 @@ if __name__ == "__main__":
     c_ = CSVPretreatment(
         "D:\\王树鑫\\Learning\\Kcode实验室\\SemTab2022\\Code\\SEUTab\\data\\Round2\\ToughTablesR2-WD\\Test\\tables\\",
         "5HD27KI3.csv")
-    print(c_.json_)
+    # print(c_.json_)
     # nlp = spacy.load('en_core_web_sm')
     # print(nlp.pipe_labels)
