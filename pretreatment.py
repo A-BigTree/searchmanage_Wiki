@@ -194,6 +194,9 @@ class JsonDataManage(object):
         """Get data details."""
         return self.json_["data"]
 
+    def __str__(self):
+        return "[row %d× col %d]\nKey column index: %d\n"
+
 
 class CSVPretreatment(JsonDataManage):
     """The class for manage of csv file pretreatment.
@@ -346,9 +349,10 @@ class PretreatmentManage(object):
 
 
 if __name__ == "__main__":
-    c_ = CSVPretreatment(
-        "D:\\王树鑫\\Learning\\Kcode实验室\\SemTab2022\\Code\\SEUTab\\data\\Round2\\ToughTablesR2-WD\\Test\\tables\\",
-        "5HD27KI3.csv")
+    # c_ = CSVPretreatment(
+    # "D:\\王树鑫\\Learning\\Kcode实验室\\SemTab2022\\Code\\SEUTab\\data\\Round2\\ToughTablesR2-WD\\Test\\tables\\",
+    # "5HD27KI3.csv")
     # print(c_.json_)
     # nlp = spacy.load('en_core_web_sm')
     # print(nlp.pipe_labels)
+    print("abc" + [1, 2, 3, 4].__str__())
