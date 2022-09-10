@@ -5,6 +5,7 @@
 # @function: the script is used to do something.
 # @version : V1.0 
 #
+import warnings
 
 import Levenshtein
 from searchmanage import SpellCheck, SearchManage, Tools, DbpediaLookUp
@@ -27,7 +28,8 @@ JSON_VALUE = {
     "correction": list,
     "QIDs": list,
     "Labels": list,
-    "IRIs": list
+    "IRIs": list,
+    "Types": list
 }
 
 JSON_COLUMN = {
@@ -74,6 +76,8 @@ class JsonDataManage(object):
 
         :return: json data read from json file.
         """
+        if len(json_file_path.split(".")) == 0:
+            json_file_path = json_file_path + ".json"
         try:
             with open(json_file_path, mode="r+", encoding="utf-8") as f:
                 self.json_ = json.load(f)
@@ -96,27 +100,79 @@ class JsonDataManage(object):
             print(e)
             raise ValueError("Write json file %s failed." % json_file_pah)
 
-    def get_column_values(self, col_index: int) -> list:
-        """Get a list original values from a column.
+    def can_column_search(self, col_index: int) -> bool:
+        """Judge whether a column data can be queried.
 
-        :param col_index: the index of column data you want to get
+        :param col_index:
+            the index of column data you want to judge
 
         :raise IndexError: col_index is greater than number of json data column
+
+        :return: whether data can be queried
         """
         if col_index >= self.json_["col"]:
             raise IndexError("Json data only has %d columns." % self.json_["col"])
+        return self.json_["data"][col_index]["canSearch"]
 
-        if self.json_["data"][col_index]["canSearch"]:
+    def get_column_data(self, col_index: int, key: str = "value") -> list:
+        """Get a list original values from a column.
+
+        :param col_index:
+            the index of column data you want to get
+        :param key:
+            key word want to get. 'value', 'correction', 'QIDs',
+            'Labels', 'IRIs' or 'Types'. Default: 'value'
+
+        :raise IndexError:
+            col_index is greater than number of json data column
+
+        :return:
+            the data of a column from its key word. If the column
+            can not be queried, it will return the original data.
+        """
+        if col_index >= self.shape[1]:
+            raise IndexError("Json data only has %d columns." % self.json_["col"])
+        if key not in JSON_VALUE.keys():
+            warnings.warn("No key = %s in json data." % key)
+            key = "value"
+        if self.can_column_search(col_index):
             re_ = []
             for da_ in self.json_["data"][col_index]["column"]:
                 if da_["isNone"]:
                     re_.append("None")
                 else:
-                    re_.append(da_["value"])
+                    re_.append(da_[key])
+            return re_
         else:
             return self.json_["data"][col_index]["column"]
 
-        return list()
+    def get_cell_data(self, i: int, j: int, key: str = "value") -> Union[str, list]:
+        """Get the date of key word from index(i, j).
+
+        :param i:
+            index of row
+        :param j:
+            index of column
+        :param key:
+            key word want to get. 'value', 'correction', 'QIDs',
+            'Labels', 'IRIs' or 'Types'. Default: 'value'
+
+        :raise IndexError:
+            Index is greater than the number of row or column
+
+        :return:
+            the data of a cell from its key word. If the column
+            can not be queried, it will return the original data.
+        """
+        if i >= self.shape[0] or j >= self.shape[1]:
+            raise IndexError("Index is greater than the number of row or column.")
+        if key not in JSON_VALUE.keys():
+            warnings.warn("No key = %s in json data." % key)
+            key = "value"
+        if self.can_column_search(j):
+            return self.json_["data"][j]["column"][i][key]
+        else:
+            return self.json_["data"][j]["column"][i]
 
     @property
     def shape(self) -> tuple:
@@ -242,7 +298,8 @@ class CSVPretreatment(JsonDataManage):
                         "correction": None,
                         "QIDs": None,
                         "Labels": None,
-                        "IRIs": None
+                        "IRIs": None,
+                        "types": None
                     }
                     # csv cell data is None
                     if csv_ is None or csv_ == "":
