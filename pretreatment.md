@@ -51,6 +51,7 @@ class CSVPretreatment{
         {
             "canSearch": true,
             "type": "$列数据类型",
+            "PID":"Pxx",
             "column":[
                 {
                     "isNo": false,
@@ -64,16 +65,25 @@ class CSVPretreatment{
                         "..."
                     ],
                     "Labels":[
-                        "$搜索label1",
+                        "$label1",
                         "..."
                     ],
                     "IRIs":[
                         "$IRI1",
                         "..."
                     ],
+                    "Description":[
+                        "$Description1",
+                        "..."
+                    ],
                     "Types":[
                         "$DBpedia<Type>1",
                         "..."
+                    ],
+                    //匹配实体，具体信息在不同任务中不同
+                    "Target":[
+                        "Qxx1",
+                        
                     ]
                 },
             ]
@@ -81,6 +91,7 @@ class CSVPretreatment{
         //不可查询列
         {
             "canSearch": false,
+            "PID":"Pxx",
             "column":[
                 "$源值1", 
                 "..."
