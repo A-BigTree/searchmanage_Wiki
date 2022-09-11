@@ -536,10 +536,4 @@ class PretreatmentManage(object):
 
 
 if __name__ == "__main__":
-    # c_ = CSVPretreatment(
-    # "D:\\王树鑫\\Learning\\Kcode实验室\\SemTab2022\\Code\\SEUTab\\data\\Round2\\ToughTablesR2-WD\\Test\\tables\\",
-    # "5HD27KI3.csv")
-    # print(c_.json_)
-    # nlp = spacy.load('en_core_web_sm')
-    # print(nlp.pipe_labels)
-    print([] + [4, 5, 6])
+    pass
