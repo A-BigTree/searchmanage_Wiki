@@ -779,7 +779,7 @@ class DbpediaLookUp(EntitiesSearch):
     def search_run(self, points: list, patten: str = "search", is_all: bool = False, timeout: float = 30.0,
                    time_stop: float = 30.0, block_num: int = 10, function_=None, args: tuple = (), **kwargs) -> dict:
         """Run querying using multithread.
-        
+
         :param points:
             N-dimensional list of variable parameters in sparql element
         :param patten:
