@@ -16,6 +16,13 @@ CSVPretreatment..>searchmanage:依赖
 
 class JsonDataManage{
 +josn_
+
++list:get_column_data(index:int, key:str)
++set_colum_data_data(data:Any, index:int, key:str)
++Any:get_colum_property(index:int, key:str)
++set_column_property(data:Any, index:int, key:str)
++Any:get_cell_data()
++set_cell_data()
 }
 
 class searchmanage{

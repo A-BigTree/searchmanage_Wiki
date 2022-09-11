@@ -9,7 +9,8 @@ import time
 import warnings
 import Levenshtein
 from typing import Union, Any, List
-from searchmanage import SpellCheck, SearchManage, Tools, DbpediaLookUp
+from searchmanage import SpellCheck, SearchManage, Tools
+# from searchmanage import DbpediaLookUp
 # from searchmanage import AnalysisTools
 import json
 # import pandas as pd
@@ -115,9 +116,11 @@ class JsonDataManage(object):
         :param col_index:
             the index of column data you want to judge
 
-        :raise IndexError: col_index is greater than number of json data column
+        :raise IndexError:
+            col_index is greater than number of json data column
 
-        :return: whether data can be queried
+        :return:
+            whether data can be queried
         """
         return self.get_column_property(col_index, "canSearch")
 
