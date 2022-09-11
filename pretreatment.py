@@ -8,7 +8,7 @@
 
 import warnings
 import Levenshtein
-from typing import Union, Any
+from typing import Union, Any, List
 from searchmanage import SpellCheck, SearchManage, Tools, DbpediaLookUp
 import json
 # import pandas as pd
@@ -31,6 +31,7 @@ JSON_VALUE = {
     "Labels": list,
     "IRIs": list,
     "Types": list,
+    "Expansion": Any,
     "Target": Any
 }
 
@@ -106,6 +107,9 @@ class JsonDataManage(object):
     def can_column_search(self, col_index: int) -> bool:
         """Judge whether a column data can be queried.
 
+        See also:
+            - get_column_property()
+
         :param col_index:
             the index of column data you want to judge
 
@@ -113,18 +117,17 @@ class JsonDataManage(object):
 
         :return: whether data can be queried
         """
-        if col_index >= self.json_["col"]:
-            raise IndexError("Json data only has %d columns." % self.json_["col"])
-        return self.json_["data"][col_index]["canSearch"]
+        return self.get_column_property(col_index, "canSearch")
 
     def get_column_data(self, col_index: int, key: str = "value") -> list:
-        """Get a list original values from a column.
+        """Get a list of key word data from a column.
 
         :param col_index:
             the index of column data you want to get
         :param key:
             key word want to get. 'value', 'correction', 'QIDs',
-            'Labels', 'IRIs' or 'Types'. Default: 'value'
+            'Labels', 'IRIs', 'Types', 'Expansion' or 'Target'.
+            Default: 'value'
 
         :raise IndexError:
             col_index is greater than number of json data column
@@ -149,6 +152,73 @@ class JsonDataManage(object):
         else:
             return self.json_["data"][col_index]["column"]
 
+    def set_column_data(self, data: List[Any], col_index: int, key: str = "correction"):
+        """Set data of key word to a column.
+
+        :param data:
+            a list of data you will set
+        :param col_index:
+            index of col_index
+        :param key:
+            key word want to get. 'value', 'correction', 'QIDs',
+            'Labels', 'IRIs' or 'Types'. Default: 'value'
+
+        :raise IndexError:
+            col_index is greater than number of json data column
+        """
+        if col_index >= self.shape[1]:
+            raise IndexError("Json data only has %d columns." % self.json_["col"])
+        if key not in JSON_VALUE.keys():
+            warnings.warn("No key = %s in json data." % key)
+            key = "correction"
+        if self.can_column_search(col_index):
+            if len(data) != len(self.json_["data"][col_index]["column"]):
+                warnings.warn("The length (%d) of data isn't equal to the length(%d) of column(%d)." %
+                              (len(data), len(self.json_["data"][col_index]["column"]), col_index))
+            for i in range(len(data)):
+                self.json_["data"][col_index]["column"][i][key] = data[i]
+        else:
+            warnings.warn("The index %d of column can not be queried." % col_index)
+
+    def get_column_property(self, col_index: int, key: str = "PID") -> Union[str, list, bool]:
+        """Get column property in key word.
+
+        :param col_index:
+            the index of column data you want to judge
+        :param key:
+            key word want to get. 'canSearch', 'PID', 'type'
+            or 'column'. Default: 'PID'.
+
+        :raise IndexError: col_index is greater than number of json data column
+
+        :return:
+            the data from key word
+        """
+        if col_index >= self.json_["col"]:
+            raise IndexError("Json data only has %d columns." % self.json_["col"])
+        if key not in JSON_COLUMN.keys():
+            warnings.warn("No key = %s in json column property." % key)
+            key = "PID"
+        return self.json_["data"][col_index][key]
+
+    def set_column_property(self, data, col_index: int, key: str = 'PID'):
+        """Set data of key word to a column property.
+
+        :param data:
+            the data you will set
+        :param col_index:
+            the index of column data you want to judge
+        :param key:
+            key word want to get. 'canSearch', 'PID', 'type'
+            or 'column'. Default: 'PID'.
+        """
+        if col_index >= self.json_["col"]:
+            raise IndexError("Json data only has %d columns." % self.json_["col"])
+        if key not in JSON_COLUMN.keys():
+            warnings.warn("No key = %s in json column property." % key)
+            key = "PID"
+        self.json_["data"][col_index][key] = data
+
     def get_cell_data(self, i: int, j: int, key: str = "value") -> Union[str, list]:
         """Get the date of key word from index(i, j).
 
@@ -158,7 +228,8 @@ class JsonDataManage(object):
             index of column
         :param key:
             key word want to get. 'value', 'correction', 'QIDs',
-            'Labels', 'IRIs' or 'Types'. Default: 'value'
+            'Labels', 'IRIs' 'Types', 'Expansion' or 'Target'.
+            Default: 'value'
 
         :raise IndexError:
             Index is greater than the number of row or column
@@ -178,6 +249,33 @@ class JsonDataManage(object):
             return self.json_["data"][j]["column"][i][key]
         return self.json_["data"][j]["column"][i]
 
+    def set_cell_data(self, data: Any, i: int, j: int, key: str = "correction"):
+        """Set a cell date in key word to index(i, j).
+
+        :param data:
+            the data you want to set
+        :param i:
+            index of row
+        :param j:
+            index of column
+        :param key:
+            key word want to get. 'value', 'correction', 'QIDs',
+            'Labels', 'IRIs' 'Types', 'Expansion' or 'Target'.
+            Default: 'correction'
+
+        :raise IndexError:
+            Index is greater than the number of row or column
+        """
+        if i >= self.shape[0] or j >= self.shape[1]:
+            raise IndexError("Index is greater than the number of row or column.")
+        if key not in JSON_VALUE.keys():
+            warnings.warn("No key = %s in json data." % key)
+            key = "correction"
+        if self.can_column_search(j):
+            self.json_["data"][j]["column"][i][key] = data
+        else:
+            warnings.warn("The index %d of column can not be queried." % j)
+
     @property
     def shape(self) -> tuple:
         """Get the shape of the table."""
@@ -192,6 +290,14 @@ class JsonDataManage(object):
     def column_types(self) -> list:
         """Get columns' type."""
         return self.json_["columnsType"]
+
+    @property
+    def column_pids(self) -> list:
+        """Get the columns' pid."""
+        re_ = []
+        for col_ in self.json_["data"]:
+            re_.append(col_["PID"])
+        return re_
 
     @property
     def data(self) -> list:
@@ -309,6 +415,7 @@ class CSVPretreatment(JsonDataManage):
                         "Labels": None,
                         "IRIs": None,
                         "Types": None,
+                        "Expansion": None,
                         "Target": None
                     }
                     # csv cell data is None
