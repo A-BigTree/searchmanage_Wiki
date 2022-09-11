@@ -11,9 +11,15 @@
 classDiagram
 
 CSVPretreatment..|>JsonDataManage:继承
+CSVPretreatment..>searchmanage:依赖
+
 
 class JsonDataManage{
 +josn_
+}
+
+class searchmanage{
+<<packsge>>
 }
 
 class CSVPretreatment{
@@ -72,7 +78,7 @@ class CSVPretreatment{
                         "$IRI1",
                         "..."
                     ],
-                    "Description":[
+                    "Descriptions":[
                         "$Description1",
                         "..."
                     ],
@@ -121,4 +127,12 @@ class CSVPretreatment{
 2. 对**可查询列**数据进行拼写纠错；
 3. 对纠错完的结果进行`text→IRIs`查询；
 4. 保存json文件；
+
+
+
+
+
+# <class>JsonDataManage</class>
+
+> 对规定Json文件进行解析读取，修改值相关操作
 

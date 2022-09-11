@@ -5,11 +5,12 @@
 # @function: the script is used to do something.
 # @version : V1.0 
 #
-
+import time
 import warnings
 import Levenshtein
 from typing import Union, Any, List
 from searchmanage import SpellCheck, SearchManage, Tools, DbpediaLookUp
+# from searchmanage import AnalysisTools
 import json
 # import pandas as pd
 import spacy
@@ -30,6 +31,7 @@ JSON_VALUE = {
     "QIDs": list,
     "Labels": list,
     "IRIs": list,
+    "Descriptions": list,
     "Types": list,
     "Expansion": Any,
     "Target": Any
@@ -126,8 +128,8 @@ class JsonDataManage(object):
             the index of column data you want to get
         :param key:
             key word want to get. 'value', 'correction', 'QIDs',
-            'Labels', 'IRIs', 'Types', 'Expansion' or 'Target'.
-            Default: 'value'
+            'Labels', 'IRIs', 'Descriptions', 'Types', 'Expansion'
+            or 'Target'. Default: 'value'
 
         :raise IndexError:
             col_index is greater than number of json data column
@@ -161,7 +163,8 @@ class JsonDataManage(object):
             index of col_index
         :param key:
             key word want to get. 'value', 'correction', 'QIDs',
-            'Labels', 'IRIs' or 'Types'. Default: 'value'
+            'Labels', 'IRIs' , 'Descriptions', 'Types', 'Expansion'
+            or 'Target'. Default: 'correction'
 
         :raise IndexError:
             col_index is greater than number of json data column
@@ -355,7 +358,11 @@ class CSVPretreatment(JsonDataManage):
         self.search_index = list()
 
     def init_json_process(self):
+        print("Init json processing...")
+        start = time.time()
         self.judge_columns_category()
+        end = time.time()
+        print("Cost time: %.3fs" % (end - start))
 
     @staticmethod
     def is_no_search_entities(entities: list) -> bool:
@@ -451,24 +458,77 @@ class CSVPretreatment(JsonDataManage):
                 key_select = i
         self.json_["keyColumnIndex"] = key_select
 
-    def correct_process(self, max_batch: int = 50):
+    def correct_process(self, max_batch: int = 50, check_time: int = 10):
         """The process of word correction.
 
         :param max_batch:
-            max number of entity in once batch for word correction
+            max number of entity in once batch
+            for word correction. Default: 50
+        :param check_time:
+            check time. Default: 10
         """
-        pass
+        print("Spell check processing...")
+        start = time.time()
+        entities_search = []
+        for i in range(self.shape[1]):
+            if self.can_column_search(i):
+                entities_search.append(self.get_column_data(i))
+        entities_1d, index_ = Tools.list_level(entities_search)
+        re_ = []
+        none_ = []
+        for i in range(len(entities_1d)):
+            re_.append([])
+            none_.append(i)
+        sp = SpellCheck(m_num=max_batch)
+        # sp_a = SpellCheck(url_="https://www.ask.com/web", m_num=max_batch)
+        spell_ = entities_1d
+        temp: list = []
+        for i in range(check_time):
+            temp = sp.search_run(spell_, timeout=1000, block_num=2)
+            # temp = sp_a.search_run(spell_, timeout=1000, block_num=2, function_=AnalysisTools.ask_analysis)
+            none_t = []
+            spell_t = []
+            t = 0
+            for j in none_:
+                if temp[t] == spell_[t]:
+                    none_t.append(j)
+                    spell_t.append(entities_1d[j])
+                else:
+                    re_[j].append(temp[t])
+                t += 1
+            spell_ = spell_t
+            none_ = none_t
+        for i in range(len(none_)):
+            re_[none_[i]].append(temp[i])
+        re_ = Tools.list_back(re_, index_)
+        j = 0
+        for i in range(self.shape[1]):
+            if self.can_column_search(i):
+                self.set_column_data(re_[j], i)
+                j += 1
+        end = time.time()
+        print("Cost time: %.3fs" % (end - start))
 
-    @staticmethod
-    def correct_model_bing(entities: list) -> list:
-        pass
-
-    @staticmethod
-    def correct_model_ask(entities: list) -> list:
-        pass
-
-    def search_process(self):
-        pass
+    def wiki_search_process(self):
+        """Search Process form text->IRIs using wikimedia API."""
+        print("Wiki search processing...")
+        start = time.time()
+        entities_search = []
+        for i in range(self.shape[1]):
+            if self.can_column_search(i):
+                entities_search.append(self.get_column_data(i, key="correction"))
+        sm = SearchManage(m_num=50)
+        re_ = sm.search_run(entities_search, keys="all", timeout=1000, block_num=3, limit=50)
+        j = 0
+        for i in range(self.shape[1]):
+            if self.can_column_search(i):
+                self.set_column_data(re_["id"][j], i, key="QIDs")
+                self.set_column_data(re_["url"][j], i, key="IRIs")
+                self.set_column_data(re_["label"][j], i, key="Labels")
+                self.set_column_data(re_["description"][j], i, key="Descriptions")
+            j += 1
+        end = time.time()
+        print("Cost time: %.3fs" % (end - start))
 
 
 class PretreatmentManage(object):
