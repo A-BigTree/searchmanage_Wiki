@@ -80,10 +80,10 @@ class CSVPretreatment{
                         "$DBpedia<Type>1",
                         "..."
                     ],
-                    //匹配实体，具体信息在不同任务中不同
+                    //匹配实体I，具体信息在不同任务中不同
                     "Target":[
                         "Qxx1",
-                        
+                        "..."
                     ]
                 },
             ]

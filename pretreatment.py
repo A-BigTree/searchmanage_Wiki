@@ -8,7 +8,7 @@
 
 import warnings
 import Levenshtein
-from typing import Union
+from typing import Union, Any
 from searchmanage import SpellCheck, SearchManage, Tools, DbpediaLookUp
 import json
 # import pandas as pd
@@ -30,11 +30,13 @@ JSON_VALUE = {
     "QIDs": list,
     "Labels": list,
     "IRIs": list,
-    "Types": list
+    "Types": list,
+    "Target": Any
 }
 
 JSON_COLUMN = {
     "canSearch": bool,
+    "PID": str,
     "column": list,
     "type": str
 }
@@ -277,6 +279,7 @@ class CSVPretreatment(JsonDataManage):
             column_dict = {
                 "canSearch": True,
                 "type": str,
+                "PID": str,
                 "column": []
             }
             none_ = 0
@@ -305,7 +308,8 @@ class CSVPretreatment(JsonDataManage):
                         "QIDs": None,
                         "Labels": None,
                         "IRIs": None,
-                        "types": None
+                        "Types": None,
+                        "Target": None
                     }
                     # csv cell data is None
                     if csv_ is None or csv_ == "":
