@@ -7,6 +7,8 @@
 #
 import Levenshtein
 from requests import Response
+from typing import List
+
 from searchmanage import SpellCheck
 import lxml.etree
 
@@ -52,6 +54,15 @@ PAGE_ASK = ['Neochmia - Wikipedia', 'Star Finch (Neochmia ruficauda) - Feathers 
 
 REMOVE_WORDS = [":", ",", ".", "-", "|", "…", "(", ")", "|", "：", "[", "]", "{", "}", "!"]
 
+
+def dg(t_: List[list], re: list, s: str, index_: int):
+    if index_ == len(t_):
+        re.append(s.strip())
+        return
+    for pos_ in t_[index_]:
+        dg(t_, re, s + pos_ + " ", index_ + 1)
+
+
 if __name__ == "__main__":
     # sp = SpellCheck(m_num=20)
     # sp_a = SpellCheck(url_="https://www.ask.com/web", m_num=20)
@@ -87,4 +98,15 @@ if __name__ == "__main__":
         print(dis)
         dis_sort_index = sorted(range(len(dis)), key=lambda k: dis[k])
         print(dis_sort_index)
-
+        r_t.append(re_[dis_sort_index[0]])
+        for in_ in dis_sort_index[1::]:
+            if dis[in_] - dis[dis_sort_index[0]] < 2:
+                r_t.append(re_[in_])
+            else:
+                break
+        r_.append(r_t)
+    print(r_)
+    r_[1].append("apple")
+    res_ = []
+    dg(r_, res_, "", 0)
+    print(res_)
