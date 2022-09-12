@@ -85,7 +85,7 @@ class CSVPretreatment{
                         "$IRI1",
                         "..."
                     ],
-                    "Descriptions":[
+                    "Description":[
                         "$Description1",
                         "..."
                     ],
@@ -93,8 +93,40 @@ class CSVPretreatment{
                         "$DBpedia<Type>1",
                         "..."
                     ],
-                    //拓展信息，自定义
-                    "Expansion": Any,
+                    //拓展信息，主题列含有
+                    "Expansion": {
+                        //属性筛选主题列拥有
+                        "Properties":[
+                            "..."
+                        ],
+                        //平均相似度，“Similarity”列表中的元素取平均
+                        "AvgSimilarity":[
+                            0.970,
+                            0.656,
+                        ],
+                        //假设表格有3列，主题列与主题列之间相似度为0
+                        "Similarity":[
+                            [0, 0.975, 0.965],
+                            [0, 0.656, 0.656],
+                            "..."
+                        ],
+                        "PIDSimilarity":[
+                            ["None", "P50", "P51"],
+                            ["None", "P36", "P70"],
+                            "..."
+                        ],
+                        //有的值匹配是非实体类型，因此为"None"
+                        "QIDSimilarity":[
+                            ["None", "Q60", "None"],
+                            ["None", "Q5", "None"],
+                            "..."
+                        ],
+                        "LabelSimilarity":[
+                            ["None", "China", "1.46"],
+                            ["None", "Human", "2.65"],
+                            "..."
+                        ]
+                    },
                     //匹配实体ID，具体信息在不同任务中不同
                     "Target": Any
                 },
@@ -133,6 +165,7 @@ class CSVPretreatment{
 1. 初步识别每列数据的数据类型，同时筛选可查询实体，即排除数字、日期时间等属性列，并同时找出主题列；
 2. 对**可查询列**数据进行拼写纠错；
 3. 对纠错完的结果进行`text→IRIs`查询；
+3. 对主题列数据进行`Properties`查询
 4. 保存json文件；
 
 
@@ -143,3 +176,24 @@ class CSVPretreatment{
 
 > 对规定Json文件进行解析读取，修改值相关操作
 
+
+
+
+
+
+
+
+
+# <class>CSVPretreatment</class>
+
+> CSV文件预处理原子类
+
+
+
+
+
+
+
+# <class>PretreatmentManage</class>
+
+> CSV文件批处理管理类
