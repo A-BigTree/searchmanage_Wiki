@@ -56,6 +56,8 @@ REMOVE_CHAR = [" ", ",", ":", ".", "-", "million", "→", "[", "]", "(",
                "june", "jun", "july", "jun", "august", "aug", "september", "sep",
                "october", "oct", "november", "nov", "december", "dec"]
 
+REMOVE_WORDS = [":", ",", ".", "-", "|", "…", "(", ")", "|", "：", "[", "]", "{", "}", "!"]
+
 
 class JsonDataManage(object):
     """The class for manage of json data.
