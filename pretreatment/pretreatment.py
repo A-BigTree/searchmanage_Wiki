@@ -11,7 +11,7 @@ import Levenshtein
 from typing import Union, Any, List
 from searchmanage import SpellCheck, SearchManage, Tools
 # from searchmanage import DbpediaLookUp
-from searchmanage import AnalysisTools
+# from searchmanage import AnalysisTools
 import json
 # import pandas as pd
 import spacy
@@ -182,7 +182,7 @@ class JsonDataManage(object):
                 warnings.warn("The length (%d) of data isn't equal to the length(%d) of column(%d)." %
                               (len(data), len(self.json_["data"][col_index]["column"]), col_index))
             for i in range(len(data)):
-                if type(data[i]) == list:
+                if key == "QIDs":
                     data[i], i_ = Tools.list_level(data[i])
                     del i_
                 self.json_["data"][col_index]["column"][i][key] = data[i]
@@ -281,6 +281,9 @@ class JsonDataManage(object):
             warnings.warn("No key = %s in json data." % key)
             key = "correction"
         if self.can_column_search(j):
+            if key == "QIDs":
+                data, i_ = Tools.list_level(data)
+                del i_
             self.json_["data"][j]["column"][i][key] = data
         else:
             warnings.warn("The index %d of column can not be queried." % j)
