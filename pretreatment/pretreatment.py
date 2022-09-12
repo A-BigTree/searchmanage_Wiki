@@ -11,7 +11,7 @@ import Levenshtein
 from typing import Union, Any, List
 from searchmanage import SpellCheck, SearchManage, Tools
 # from searchmanage import DbpediaLookUp
-# from searchmanage import AnalysisTools
+from searchmanage import AnalysisTools
 import json
 # import pandas as pd
 import spacy
@@ -182,6 +182,9 @@ class JsonDataManage(object):
                 warnings.warn("The length (%d) of data isn't equal to the length(%d) of column(%d)." %
                               (len(data), len(self.json_["data"][col_index]["column"]), col_index))
             for i in range(len(data)):
+                if type(data[i]) == list:
+                    data[i], i_ = Tools.list_level(data[i])
+                    del i_
                 self.json_["data"][col_index]["column"][i][key] = data[i]
         else:
             warnings.warn("The index %d of column can not be queried." % col_index)
@@ -539,4 +542,10 @@ class PretreatmentManage(object):
 
 
 if __name__ == "__main__":
-    pass
+    csv = CSVPretreatment(
+        "D:\\王树鑫\\Learning\\Kcode实验室\\SemTab2022\\Code\\SEUTab\\data\\Round2\\HardTablesR2\\Test\\tables\\",
+        "TH68BL3M.csv")
+    csv.init_json_process()
+    csv.correct_process(max_batch=50, check_time=10)
+    csv.wiki_search_process()
+    print(csv.json_)
