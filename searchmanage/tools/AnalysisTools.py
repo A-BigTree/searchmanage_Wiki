@@ -580,3 +580,27 @@ class AnalysisTools:
         except Exception as e:
             print(e)
         return res
+
+    @staticmethod
+    def bing_page(request_: Response):
+        res = None
+        # print(request_.text)
+        try:
+            xpath_data = lxml.etree.HTML(request_.text)
+            res = xpath_data.xpath("/html/body/div[1]/main/ol//h2//text()")
+            # print(res)
+        except Exception as e:
+            print(e)
+        return res
+
+    @staticmethod
+    def ask_page(request_: Response):
+        res = None
+        # print(request_.url)
+        try:
+            xpath_data = lxml.etree.HTML(request_.text)
+            res = xpath_data.xpath("/html/body/div[2]/div/main/div/div[1]/section/div/div[4]/div/div[2]//a//text()")
+            # print(res)
+        except Exception as e:
+            print(e)
+        return res

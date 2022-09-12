@@ -56,7 +56,7 @@ REMOVE_CHAR = [" ", ",", ":", ".", "-", "million", "→", "[", "]", "(",
                "june", "jun", "july", "jun", "august", "aug", "september", "sep",
                "october", "oct", "november", "nov", "december", "dec"]
 
-REMOVE_WORDS = [":", ",", ".", "-", "|", "…", "(", ")", "|", "：", "[", "]", "{", "}", "!"]
+REMOVE_WORDS = [":", ",", ".", "-", "|", "…", "(", ")", "|", "：", "[", "]", "{", "}", "!", "a"]
 
 
 class JsonDataManage(object):
@@ -519,6 +519,19 @@ class CSVPretreatment(JsonDataManage):
                 j += 1
         end = time.time()
         print("Cost time: %.3fs" % (end - start))
+
+    @staticmethod
+    def spell_check_process(entities: list, max_batch: int = 50, check_time: int = 10) -> list:
+        entities_pre = []
+        for entity in entities:
+            temp_s = entity
+            for rw in REMOVE_WORDS:
+                temp_s = temp_s.replace(rw, " ")
+            entities_pre.append(temp_s)
+        return []
+
+
+
 
     def wiki_search_process(self):
         """Search Process form text->IRIs using wikimedia API."""
