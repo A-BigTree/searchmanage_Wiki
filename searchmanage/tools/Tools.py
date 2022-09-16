@@ -188,7 +188,6 @@ class Tools:
 
         Example
         -------
-        >>> from tools import Tools
         >>> data = [{'a':{'a1':[1,2],'a2':[3,4]},'b':{'b1':[1,2],'b2':[3,4]}}]
         >>> Tools.hierarchical_structure(data)
          0 <class 'list'>
@@ -346,7 +345,6 @@ class Tools:
 
         Example
         -------
-        >>> from tools import Tools
         >>> a=[[1,1],[2,2],[3],[4,4,4],[],[6]]
         >>> print(a)
         [[1, 1], [2, 2], [3], [4, 4, 4], [], [6]]

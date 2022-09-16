@@ -85,23 +85,23 @@ class AnalysisTools:
                     try:
                         id_.append(da_['id'])
                     except KeyError:
-                        pass
+                        id_.append(None)
                     try:
                         url_.append(da_['url'])
                     except KeyError:
-                        pass
+                        url_.append(None)
                     try:
                         label_.append(da_['label'])
                     except KeyError:
-                        pass
+                        label_.append(None)
                     try:
                         describe_.append(da_['description'])
                     except KeyError:
-                        pass
+                        label_.append(None)
                     try:
                         match_.append(da_['match']['type'])
                     except KeyError:
-                        pass
+                        label_.append(None)
         except KeyError:
             pass
 
@@ -476,13 +476,16 @@ class AnalysisTools:
 
                     for k in keys_dict:
                         re_dict[k['key']] = None
-                        if k['correct'] == 1:
-                            if k['root'] in PATTEN1:
-                                re_dict[k['key']] = AnalysisTools.patten1_analysis(value_, k)
-                            elif k['root'] == 'claims':
-                                re_dict[k['key']] = AnalysisTools.claims_analysis(value_, k)
-                            elif k['root'] == 'sitelinks':
-                                re_dict[k['key']] = AnalysisTools.sitelinks_analysis(value_, k)
+                        if k['key'] == "properties":
+                            re_dict[k['key']] = AnalysisTools.wiki_property_analysis(value_)
+                        else:
+                            if k['correct'] == 1:
+                                if k['root'] in PATTEN1:
+                                    re_dict[k['key']] = AnalysisTools.patten1_analysis(value_, k)
+                                elif k['root'] == 'claims':
+                                    re_dict[k['key']] = AnalysisTools.claims_analysis(value_, k)
+                                elif k['root'] == 'sitelinks':
+                                    re_dict[k['key']] = AnalysisTools.sitelinks_analysis(value_, k)
 
                     re_list.append(re_dict)
         except KeyError:
@@ -583,11 +586,18 @@ class AnalysisTools:
 
     @staticmethod
     def bing_page(request_: Response):
-        res = None
+        res = []
         # print(request_.text)
         try:
             xpath_data = lxml.etree.HTML(request_.text)
-            res = xpath_data.xpath("/html/body/div[1]/main/ol//h2//text()")
+            res_ = xpath_data.xpath("/html/body/div[1]/main/ol//h2//text()")
+            if type(res_) != list:
+                if type(res_) == str:
+                    res = [res_]
+                else:
+                    res = []
+            else:
+                res = res_
             # print(res)
         except Exception as e:
             print(e)
@@ -604,3 +614,23 @@ class AnalysisTools:
         except Exception as e:
             print(e)
         return res
+
+    @staticmethod
+    def wiki_property_analysis(value_: dict):
+        try:
+            da__: dict = value_['claims']
+        except KeyError:
+            return {}
+        re_ = dict()
+        for k_, v__ in da__.items():
+            re_[k_] = []
+            for v_ in v__:
+                try:
+                    if v_['type'] == 'statement':
+                        v = v_['mainsnak']
+                        re__ = AnalysisTools.value_analysis(v)
+                        if re__[1] is not None:
+                            re_[k_].append(re__)
+                except KeyError:
+                    pass
+        return re_
