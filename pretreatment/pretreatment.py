@@ -14,8 +14,7 @@ from pathlib import Path
 from queue import Queue
 import Levenshtein
 from typing import Union, Any, List, Tuple, Pattern
-from searchmanage import SpellCheck, SearchManage, Tools, AnalysisTools
-# from searchmanage import DbpediaLookUp
+from searchmanage import SpellCheck, SearchManage, Tools, AnalysisTools, DbpediaLookUp
 import json
 import pandas as pd
 import spacy
@@ -700,6 +699,21 @@ class CSVPretreatment(JsonDataManage):
         end = time.time()
         print("Cost time: %.3fs.\n" % (end - start))
 
+    def dbpeida_search_process(self):
+        print("DBpedia search process...")
+        start = time.time()
+        entities_search = []
+        entities_index = []
+        for i in range(self.shape[1]):
+            if self.can_column_search(i):
+                entities_search.append(self.get_column_data(i, key="correction"))
+                entities_index.append(i)
+        print(entities_search)
+        db = DbpediaLookUp(m_num=200)
+        re_ = db.search_run(entities_search, timeout=2000, time_stop=30, block_num=3)
+        print(re_['resource'])
+        print(re_['type'])
+
     def wiki_claims_process(self):
         start = time.time()
         print("Querying properties process...")
@@ -819,7 +833,7 @@ class PretreatmentManage(object):
                 if file.split(".")[1] == "csv":
                     self.files_queue.put(file)
 
-    def init_and_bing_process(self, queue_f: Queue, queue_j: Queue, queue_c: Queue):
+    def init_and_bing_process(self, queue_f: Queue, queue_j: Queue, queue_c: Queue, is_wiki=True):
         js = JsonDataManage()
         csv = CSVPretreatment(self.files_path + "\\")
         while not queue_f.empty():
@@ -834,7 +848,10 @@ class PretreatmentManage(object):
             try:
                 csv.init_file(f_)
                 csv.correct_process(max_batch=50, check_time=10)
-                csv.wiki_search_process()
+                if is_wiki:
+                    csv.wiki_search_process()
+                else:
+                    csv.dbpeida_search_process()
             except Exception as e1:
                 print(e1)
                 cache = False
@@ -874,7 +891,7 @@ class PretreatmentManage(object):
     def run(self):
         queue_j = Queue()
         queue_c = Queue()
-        p = threading.Thread(target=self.init_and_bing_process, args=(self.files_queue, queue_j, queue_c,))
+        p = threading.Thread(target=self.init_and_bing_process, args=(self.files_queue, queue_j, queue_c, False,))
         p.start()
         c = threading.Thread(target=self.properties_process, args=(self.files_queue, queue_j, queue_c,))
         c.start()
