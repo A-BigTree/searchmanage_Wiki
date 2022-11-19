@@ -318,23 +318,23 @@ print(re_json)
 
 | Datetype                                                     |     json键值      |     Valuetype     |
 | :----------------------------------------------------------- | :---------------: | :---------------: |
-| Commons media**(参考维基共享资源上的文件,图片等)**           |   commonsMedia    |      string       |
-| Globe coordinate**(地理位置，经纬度)**                       | globe-coordinate  |  globecoordinate  |
-| Item**(内部链接到另一个项)**                                 |   wikibase-item   | wikibase-entityid |
-| Property**(指向属性的内部链接)**                             | wikibase-property | wikibase-entityid |
-| String**(不需要翻译成不同语言或数字格式的字符链，数字和符号)** |      string       |      string       |
-| Monolingual text**(未翻译为其他语言的字符串，当地语言编写的位置实体名称，某种标识符，化学式或拉丁学名)** |  monolingualtext  |  monolingualtext  |
-| External identifier**(表示外部系统中使用的标识符的字符串)**  |    external-id    |      string       |
-| Quantity**(代表一个十进制数字，以及有关该数字的不确定性区间的信息，以及一个测量单位)** |     quantity      |     quantity      |
-| Time**(以格里高利或朱利安日历存储日期)**                     |       time        |       time        |
-| URL**(用于标识某种外部资源，可能是某种外部网站的链接)**      |        url        |      string       |
-| Mathematical expression**(显示为数学公式的格式化字符串)**    |       math        |      string       |
-| Geographic shape**(参考维基共享资源上的地图数据文件命名空间)** |     geo-shape     |      string       |
-| Musical Notation**(描述遵循 LilyPond 语法的音乐的字符串)**   | musical-notation  |      string       |
-| Tabular data**(参考维基共享资源上的表格数据文件命名字符串)** |   tabular-data    |      string       |
-| Lexeme**(对于引用另一个 Lexeme 的 Lexemes 的陈述)**          |  wikibase-lexeme  | wikibase-entityid |
-| Form**(对于 Lexemes 上的陈述，这些陈述引用了其他 Lexeme 上的 Forms 以表明它们的关系)** |   wikibase-form   | wikibase-entityid |
-| Sense**(对于在其他 Lexemes 上引用 Senses 的 Lexemes 的陈述)** |  wikibase-sense   | wikibase-entityid |
+| Commons media **(参考维基共享资源上的文件,图片等)**           |   commonsMedia    |      string       |
+| Globe coordinate **(地理位置，经纬度)**                       | globe-coordinate  |  globecoordinate  |
+| Item **(内部链接到另一个项)**                                 |   wikibase-item   | wikibase-entityid |
+| Property **(指向属性的内部链接)**                             | wikibase-property | wikibase-entityid |
+| String **(不需要翻译成不同语言或数字格式的字符链，数字和符号)** |      string       |      string       |
+| Monolingual text **(未翻译为其他语言的字符串，当地语言编写的位置实体名称，某种标识符，化学式或拉丁学名)** |  monolingualtext  |  monolingualtext  |
+| External identifier **(表示外部系统中使用的标识符的字符串)**  |    external-id    |      string       |
+| Quantity **(代表一个十进制数字，以及有关该数字的不确定性区间的信息，以及一个测量单位)** |     quantity      |     quantity      |
+| Time **(以格里高利或朱利安日历存储日期)**                     |       time        |       time        |
+| URL **(用于标识某种外部资源，可能是某种外部网站的链接)**      |        url        |      string       |
+| Mathematical expression **(显示为数学公式的格式化字符串)**    |       math        |      string       |
+| Geographic shape **(参考维基共享资源上的地图数据文件命名空间)** |     geo-shape     |      string       |
+| Musical Notation **(描述遵循 LilyPond 语法的音乐的字符串)**   | musical-notation  |      string       |
+| Tabular data **(参考维基共享资源上的表格数据文件命名字符串)** |   tabular-data    |      string       |
+| Lexeme **(对于引用另一个 Lexeme 的 Lexemes 的陈述)**          |  wikibase-lexeme  | wikibase-entityid |
+| Form **(对于 Lexemes 上的陈述，这些陈述引用了其他 Lexeme 上的 Forms 以表明它们的关系)** |   wikibase-form   | wikibase-entityid |
+| Sense **(对于在其他 Lexemes 上引用 Senses 的 Lexemes 的陈述)** |  wikibase-sense   | wikibase-entityid |
 
 
 
