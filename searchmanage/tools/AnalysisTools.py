@@ -97,7 +97,7 @@ class AnalysisTools:
                     try:
                         describe_.append(da_['description'])
                     except KeyError:
-                        label_.append(None)
+                        describe_.append(None)
                     try:
                         match_.append(da_['match']['type'])
                     except KeyError:
